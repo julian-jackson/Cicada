@@ -1,4 +1,4 @@
-import os, subprocess, pygame, time, pickle, shutil, UI as ui, Engine as engine, DisplayManager
+import os, random, subprocess, pygame, time, pickle, shutil, UI as ui, Engine as engine, DisplayManager
 from pathlib import Path
 
 run = True
@@ -40,8 +40,8 @@ def new_object(object_type):
     if object_type == "Rect":
         config_dict = {
             "name": "test_rect",
-            "x": 0,
-            "y": 0,
+            "x": random.randint(0, 1280),
+            "y": random.randint(0, 720),
             "width": 64,
             "height": 64,
             "collison": False,
@@ -72,6 +72,11 @@ while run:
         if "Rect" in event_handler[-1]:
             new_object("Rect")
     #exec(open('Engine.py').read())
+
+    random_number = random.randint(0, 50)
+    
+    if random_number < 25:
+        new_object("Rect")
     
     if first_time:
         os.startfile(f"Engine.py")
@@ -82,6 +87,5 @@ while run:
         win.blit(game_window, (430, 70))
     except:
         pass
-
 
     pygame.display.update()
