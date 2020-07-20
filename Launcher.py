@@ -75,8 +75,7 @@ while run:
             time.sleep(0.1)
         if project+"open" in event_handler:
             with open(f"{cache_path}/info.cache", "wb") as f:
-                pickle.dump(project, f)
-                
+                pickle.dump(project, f)          
             pygame.display.quit()
             exec(open('Editor.py').read())
 
@@ -88,9 +87,13 @@ while run:
             "Date Created": int(time.time()),
         }
         Path(f"{project_path}/{textbox_handler[0]}").mkdir(parents=True, exist_ok=True)
-
-        with open(f'{project_path}/{textbox_handler[0]}//{textbox_handler[0]}.project', 'wb') as f:
+        
+        with open(f'{project_path}/{textbox_handler[0]}/{textbox_handler[0]}.project', 'wb') as f:
             pickle.dump(project_metadata, f)   
+        with open(f'{project_path}/{textbox_handler[0]}/Rect.type', 'wb') as f:
+            pickle.dump(empty_list, f)   
+        with open(f'{project_path}/{textbox_handler[0]}/Bg.type', 'wb') as f:
+            pickle.dump(empty_list, f)   
 
     pygame.display.update()
     

@@ -1,6 +1,5 @@
-import os, pygame, time, pickle, shutil, UI as ui
+import os, subprocess, pygame, time, pickle, shutil, UI as ui, Engine as engine
 from pathlib import Path
-
 
 run = True
 
@@ -15,9 +14,10 @@ cache_path = main_path + "\cache"
 
 with open(f'{cache_path}\info.cache', 'rb') as f:
     cache_info = pickle.load(f)
-current_project = cache_info
-current_project_path = main_path + f"\projects\{current_project}"
 
+current_project = cache_info[0]
+current_project_path = main_path + f"\projects\{current_project}"
+print(current_project_path)
 original_width = 1280
 original_height = 720
 width_scaler = 0
@@ -28,7 +28,7 @@ background = ui.Background(colour=(75, 75, 75))
 
 tree_header = ui.TextBox(x=30, y=85, font_size=50, font_colour=(40, 40, 40), text="Entity Tree:")
 
-dropdown_test = ui.DropDown(text="File", items=["", "Save", "Reload", "Exit"])
+dropdown_test = ui.DropDown(text="File", items=["", "Play", "Save", "Reload", "Exit"])
 create_item_dropdown = ui.DropDown(x=125, text="Create", items=["", "Rect", "Smart", "Bg"])
 
 tree_panel = ui.Panel(x=15, y=70, width=400, height=625, colour=(200, 200, 200))
@@ -36,9 +36,9 @@ preview_panel = ui.Panel(x=430, y=70, width=768, height=432, colour=(200, 200, 2
 #info_panel = ui.Panel(x=430, y=400, width=700, height=310, colour=(200, 200, 200))
 select_project_queue = (background, tree_panel, tree_header, preview_panel, dropdown_test, create_item_dropdown)
 
-def new_rect_object(object_list):
+def new_object(object_type):
     if object_type == "Rect":
-        rect_config = {
+        config_dict = {
             "name": "test_rect",
             "x": 0,
             "y": 0,
@@ -46,11 +46,14 @@ def new_rect_object(object_list):
             "height": 64,
             "collison": False,
         }
-        with open(f'{rect_config["name"]}.object', 'wb') as f:
-            pickle.dump(rect_config, f)   
-
-
-
+        config = config_dict
+        with open(f"{current_project_path}\Rect.type", 'rb') as f:
+            rects = pickle.load(f)
+        rects.append(config)
+        print(rects)
+        with open(f'{current_project_path}\Rect.type', 'wb') as f:
+            pickle.dump(rects, f)
+first_time = True
 while run:
     event_handler = []
     for event in pygame.event.get():
@@ -68,4 +71,9 @@ while run:
             exec(open('Launcher.py').read())
         if "Rect" in event_handler[-1]:
             new_object("Rect")
+    #exec(open('Engine.py').read())
+    
+    if first_time:
+        os.startfile(f"Engine.py")
+        first_time = False
     pygame.display.update()
