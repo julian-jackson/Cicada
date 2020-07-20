@@ -1,0 +1,2 @@
+- Stackoverflow when handling display.jpg
+- Flicking when impurt detected while loading display.jgp

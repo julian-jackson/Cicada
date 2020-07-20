@@ -1,4 +1,4 @@
-import os, subprocess, pygame, time, pickle, shutil, UI as ui, Engine as engine
+import os, subprocess, pygame, time, pickle, shutil, UI as ui, Engine as engine, DisplayManager
 from pathlib import Path
 
 run = True
@@ -15,7 +15,7 @@ cache_path = main_path + "\cache"
 with open(f'{cache_path}\info.cache', 'rb') as f:
     cache_info = pickle.load(f)
 
-current_project = cache_info[0]
+current_project = cache_info
 current_project_path = main_path + f"\projects\{current_project}"
 print(current_project_path)
 original_width = 1280
@@ -76,4 +76,12 @@ while run:
     if first_time:
         os.startfile(f"Engine.py")
         first_time = False
+
+    game_window = DisplayManager.display("load", "load", "load")
+    try:
+        win.blit(game_window, (430, 70))
+    except:
+        pass
+
+
     pygame.display.update()

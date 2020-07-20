@@ -90,6 +90,15 @@ while run:
         
         with open(f'{project_path}/{textbox_handler[0]}/{textbox_handler[0]}.project', 'wb') as f:
             pickle.dump(project_metadata, f)   
+        config_dict = {
+            "name": "test_rect",
+            "x": 0,
+            "y": 0,
+            "width": 64,
+            "height": 64,
+            "collison": False,
+        }
+        empty_list.append(config_dict)
         with open(f'{project_path}/{textbox_handler[0]}/Rect.type', 'wb') as f:
             pickle.dump(empty_list, f)   
         with open(f'{project_path}/{textbox_handler[0]}/Bg.type', 'wb') as f:
