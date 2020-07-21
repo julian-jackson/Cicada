@@ -1,22 +1,18 @@
 import pygame, os
 
 def display(access, win_display, win):
+    main_path = os.path.dirname(os.path.realpath(__file__))
+    cache_path = main_path + "\cache"
+
     if access == "save":
         try:
-            pygame.image.save(win,"display.jpg")
-        except:
             pass
+        except:
+            print("err")
     if access == "load":
         try:
-            fullsize_game_window = pygame.image.load(os.path.join("display.jpg"))
-            game_window = pygame.transform.scale(fullsize_game_window, (768, 432))
-            return game_window
+            fullsize_game_window = pygame.image.load(os.path.join(f"{cache_path}\Display.jpg"))
+            return fullsize_game_window
         except:
-            try:
-                fullsize_game_window = pygame.image.load(os.path.join("temp_display.jpg"))
-                #game_window = pygame.transform.scale(fullsize_game_window, (768, 432))
-                return fullsize_game_window
-            except:
-                fullsize_game_window = pygame.image.load(os.path.join("display.jpg"))
-                game_window = pygame.transform.scale(fullsize_game_window, (768, 432))
-                return game_window
+            fullsize_game_window = pygame.image.load(os.path.join(f"{cache_path}\DisplayBuffer.jpg"))
+            return fullsize_game_window

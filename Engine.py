@@ -26,11 +26,12 @@ if __name__ == "__main__":
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                Cleaner.clear_cache()
                 run = False
         draw_rects(win)
         try:
-            temp_display = pygame.image.save(win,"temp_display.jpg")
+            pygame.image.save(win, f"{cache_path}\Display.jpg")
+            pygame.image.save(win,f"{cache_path}\DisplayBuffer.jpg")
         except:
             pass
-        DisplayManager.display("save", temp_display, win)
         pygame.display.update()

@@ -1,9 +1,10 @@
-import os, random, Cleaner, pygame, time, pickle, UI as ui, DisplayManager
+import os, random, Cleaner, pygame, string, time, pickle, UI as ui, DisplayManager
 from pathlib import Path
 
 run = True
 
 pygame.init()
+clock = pygame.time.Clock()
 win = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)    
 pygame.display.set_caption("Cicada Editor")
 
@@ -39,7 +40,7 @@ select_project_queue = (background, tree_panel, tree_header, preview_panel, drop
 def new_object(object_type):
     if object_type == "Rect":
         config_dict = {
-            "name": "test_rect",
+            "name": "".join(random.choice(string.ascii_letters) for i in range(5)),
             "x": random.randint(0, 1280),
             "y": random.randint(0, 720),
             "width": 64,
@@ -61,7 +62,6 @@ while run:
     select_project_queue = (background, tree_panel, tree_header, preview_panel, dropdown_test, create_item_dropdown)
     if keys[pygame.K_f]:
         new_object("Rect")
-
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -91,22 +91,13 @@ while run:
             event_handler.append(object_label.draw(win))
 
             y_offset += 50
-    # random_number = random.randint(0, 50)
-    
-    # if random_number < 25:
-    #     new_object("Rect")
     
     if first_time:
         os.startfile(f"Engine.py")
         first_time = False
-
     
-
     game_window = DisplayManager.display("load", "load", "load")
     fullscreen_game_window = pygame.transform.scale(game_window, (768 + width_scaler, 432 + height_scaler))
-    try:
-        win.blit(fullscreen_game_window, (430, 70))
-    except:
-        pass
-
+    win.blit(fullscreen_game_window, (430, 70))
+    clock.tick(60)
     pygame.display.update()
