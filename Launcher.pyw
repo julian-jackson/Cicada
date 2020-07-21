@@ -77,7 +77,7 @@ while run:
             with open(f"{cache_path}/info.cache", "wb") as f:
                 pickle.dump(project, f)          
             pygame.display.quit()
-            exec(open('Editor.py').read())
+            exec(open('Editor.pyw').read())
 
     if "create-project" in event_handler:
         

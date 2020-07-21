@@ -1,4 +1,4 @@
-import os
+import os, Engine
 
 def clear_cache():
     main_path = os.path.dirname(os.path.realpath(__file__)) 
@@ -7,4 +7,7 @@ def clear_cache():
     os.remove(cache_path+"\info.cache")
     os.remove(cache_path+"\Display.jpg")
     os.remove(cache_path+"\DisplayBuffer.jpg")
+
+def close_tasks():
+    Engine.end_task()
 

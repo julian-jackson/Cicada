@@ -1,4 +1,8 @@
 import pygame, os, pickle, DisplayManager
+import win32gui, win32con
+def end_task():
+    sys.exit()
+
 if __name__ == "__main__":
 
     pygame.init()
@@ -8,6 +12,9 @@ if __name__ == "__main__":
     main_path = os.path.dirname(os.path.realpath(__file__))
     project_path = main_path + "\projects"
     cache_path = main_path + "\cache"
+
+    Minimize = win32gui.GetForegroundWindow()
+    win32gui.ShowWindow(Minimize, win32con.SW_MINIMIZE)
 
     run = True
 

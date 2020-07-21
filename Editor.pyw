@@ -25,6 +25,8 @@ width_scaler = 0
 height_scaler = 0
 event_handler = []
 
+active_x = 0
+
 background = ui.Background(colour=(75, 75, 75))
 
 tree_header = ui.TextBox(x=30, y=85, font_size=50, font_colour=(40, 40, 40), text="Entity Tree:")
@@ -34,7 +36,6 @@ create_item_dropdown = ui.DropDown(x=125, text="Create", items=["", "Rect", "Sma
 
 tree_panel = ui.Panel(x=15, y=70, width=400, height=625, colour=(200, 200, 200))
 preview_panel = ui.Panel(x=430, y=70, width=768, height=432, colour=(200, 200, 200))
-#info_panel = ui.Panel(x=430, y=400, width=700, height=310, colour=(200, 200, 200))
 select_project_queue = (background, tree_panel, tree_header, preview_panel, dropdown_test, create_item_dropdown)
 
 def new_object(object_type):
@@ -59,13 +60,16 @@ while run:
     event_handler = []
     keys = pygame.key.get_pressed()
     tree_panel = ui.Panel(x=15, y=70, width=400, height=625 + height_scaler, colour=(200, 200, 200))
-    select_project_queue = (background, tree_panel, tree_header, preview_panel, dropdown_test, create_item_dropdown)
+    info_panel = ui.Panel(x=430, y=520 + int(height_scaler / 2), width=768 + width_scaler, height=175 + int(height_scaler / 2), colour=(200, 200, 200))
+
+    select_project_queue = (background, tree_panel, info_panel, tree_header, dropdown_test, create_item_dropdown)
     if keys[pygame.K_f]:
         new_object("Rect")
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             Cleaner.clear_cache()
+            Cleaner.close_tasks()
             run = False
         if event.type == pygame.VIDEORESIZE:
             win = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
@@ -76,7 +80,7 @@ while run:
         ##EVENT HANDLER ACTIONS##
         if "Exit" in event_handler[-2]:
             pygame.display.quit()
-            exec(open('Launcher.py').read())
+            exec(open('Launcher.pyw').read())
         if "Rect" in event_handler[-1]:
             new_object("Rect")
     #exec(open('Engine.py').read())
@@ -90,14 +94,21 @@ while run:
             event_handler.append(object_button.draw(win))
             event_handler.append(object_label.draw(win))
 
+            for rect in rects:
+                if rect["name"] in event_handler:
+                    active_item = rect["name"]
+                    active_x = rect["x"]
+
             y_offset += 50
     
     if first_time:
-        os.startfile(f"Engine.py")
+        os.startfile(f"Engine.pyw")
         first_time = False
-    
+
+    x_label = ui.TextBox(x=30, y=85, font_size=50, font_colour=(40, 40, 40), text=str(active_x))
+    x_label.draw(win)
     game_window = DisplayManager.display("load", "load", "load")
-    fullscreen_game_window = pygame.transform.scale(game_window, (768 + width_scaler, 432 + height_scaler))
+    fullscreen_game_window = pygame.transform.scale(game_window, (768 + width_scaler, 432 + int(height_scaler / 2)))
     win.blit(fullscreen_game_window, (430, 70))
     clock.tick(60)
     pygame.display.update()
