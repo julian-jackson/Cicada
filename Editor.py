@@ -1,4 +1,4 @@
-import os, random, subprocess, pygame, time, pickle, shutil, UI as ui, Engine as engine, DisplayManager
+import os, random, Cleaner, pygame, time, pickle, UI as ui, DisplayManager
 from pathlib import Path
 
 run = True
@@ -56,8 +56,16 @@ def new_object(object_type):
 first_time = True
 while run:
     event_handler = []
+    keys = pygame.key.get_pressed()
+    tree_panel = ui.Panel(x=15, y=70, width=400, height=625 + height_scaler, colour=(200, 200, 200))
+    select_project_queue = (background, tree_panel, tree_header, preview_panel, dropdown_test, create_item_dropdown)
+    if keys[pygame.K_f]:
+        new_object("Rect")
+
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            Cleaner.clear_cache()
             run = False
         if event.type == pygame.VIDEORESIZE:
             win = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
@@ -72,19 +80,32 @@ while run:
         if "Rect" in event_handler[-1]:
             new_object("Rect")
     #exec(open('Engine.py').read())
+        with open(f"{current_project_path}\Rect.type", 'rb') as f:
+            rects = pickle.load(f)
+        y_offset = 0
+        for rect in rects:
+            object_button = ui.Button(x=30, y=150 + y_offset, font_size=50, item_id=rect["name"], active_font=(220, 220, 220), passive_colour=(75, 75, 75), active_colour=(38, 38, 38), icon="+")
+            object_label = ui.TextBox(x=65, y=150 + y_offset, font_size=30, font_colour=(30, 30, 30), text=rect["name"])
 
-    random_number = random.randint(0, 50)
+            event_handler.append(object_button.draw(win))
+            event_handler.append(object_label.draw(win))
+
+            y_offset += 50
+    # random_number = random.randint(0, 50)
     
-    if random_number < 25:
-        new_object("Rect")
+    # if random_number < 25:
+    #     new_object("Rect")
     
     if first_time:
         os.startfile(f"Engine.py")
         first_time = False
 
+    
+
     game_window = DisplayManager.display("load", "load", "load")
+    fullscreen_game_window = pygame.transform.scale(game_window, (768 + width_scaler, 432 + height_scaler))
     try:
-        win.blit(game_window, (430, 70))
+        win.blit(fullscreen_game_window, (430, 70))
     except:
         pass
 

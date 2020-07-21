@@ -12,6 +12,11 @@ def display(access, win_display, win):
             game_window = pygame.transform.scale(fullsize_game_window, (768, 432))
             return game_window
         except:
-            fullsize_game_window = pygame.image.load(os.path.join("temp_display.jpg"))
-            game_window = pygame.transform.scale(fullsize_game_window, (768, 432))
-            return game_window
+            try:
+                fullsize_game_window = pygame.image.load(os.path.join("temp_display.jpg"))
+                #game_window = pygame.transform.scale(fullsize_game_window, (768, 432))
+                return fullsize_game_window
+            except:
+                fullsize_game_window = pygame.image.load(os.path.join("display.jpg"))
+                game_window = pygame.transform.scale(fullsize_game_window, (768, 432))
+                return game_window
