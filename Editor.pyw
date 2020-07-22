@@ -18,7 +18,6 @@ with open(f'{cache_path}\info.cache', 'rb') as f:
 
 current_project = cache_info
 current_project_path = main_path + f"\projects\{current_project}"
-print(current_project_path)
 original_width = 1280
 original_height = 720
 width_scaler = 0
@@ -26,6 +25,7 @@ height_scaler = 0
 event_handler = []
 
 active_x = 0
+active_y = 0
 
 background = ui.Background(colour=(75, 75, 75))
 
@@ -52,7 +52,6 @@ def new_object(object_type):
         with open(f"{current_project_path}\Rect.type", 'rb') as f:
             rects = pickle.load(f)
         rects.append(config)
-        print(rects)
         with open(f'{current_project_path}\Rect.type', 'wb') as f:
             pickle.dump(rects, f)
 first_time = True
@@ -98,6 +97,7 @@ while run:
                 if rect["name"] in event_handler:
                     active_item = rect["name"]
                     active_x = rect["x"]
+                    active_y = rect["y"]
 
             y_offset += 50
     
@@ -105,8 +105,12 @@ while run:
         os.startfile(f"Engine.pyw")
         first_time = False
 
-    x_label = ui.TextBox(x=30, y=85, font_size=50, font_colour=(40, 40, 40), text=str(active_x))
+    x_label = ui.TextBox(x=445, y=535 + height_scaler / 2, font_size=50, font_colour=(40, 40, 40), text=str(f"X: {active_x}"))
     x_label.draw(win)
+
+    y_label = ui.TextBox(x=445, y=580 + height_scaler / 2, font_size=50, font_colour=(40, 40, 40), text=str(f"Y: {active_y}"))
+    y_label.draw(win)
+
     game_window = DisplayManager.display("load", "load", "load")
     fullscreen_game_window = pygame.transform.scale(game_window, (768 + width_scaler, 432 + int(height_scaler / 2)))
     win.blit(fullscreen_game_window, (430, 70))
