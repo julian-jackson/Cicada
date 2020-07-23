@@ -1,5 +1,6 @@
 import os, random, Cleaner, pygame, string, time, pickle, UI as ui, DisplayManager
 from pathlib import Path
+import win32gui, win32con
 
 run = True
 
@@ -7,7 +8,8 @@ pygame.init()
 clock = pygame.time.Clock()
 win = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)    
 pygame.display.set_caption("Cicada Editor")
-
+Maximize = win32gui.GetForegroundWindow()
+win32gui.ShowWindow(Maximize, win32con.SW_MAXIMIZE)
 
 main_path = os.path.dirname(os.path.realpath(__file__))
 project_path = main_path + "\projects"
@@ -38,6 +40,12 @@ tree_panel = ui.Panel(x=15, y=70, width=400, height=625, colour=(200, 200, 200))
 preview_panel = ui.Panel(x=430, y=70, width=768, height=432, colour=(200, 200, 200))
 select_project_queue = (background, tree_panel, tree_header, preview_panel, dropdown_test, create_item_dropdown)
 
+def exec_check():
+    epoch_time = int(time.time())
+    with open(f'{cache_path}\exec.cache', 'wb') as f:
+        pickle.dump(epoch_time, f)
+
+
 def new_object(object_type):
     if object_type == "Rect":
         config_dict = {
@@ -54,6 +62,7 @@ def new_object(object_type):
         rects.append(config)
         with open(f'{current_project_path}\Rect.type', 'wb') as f:
             pickle.dump(rects, f)
+
 first_time = True
 while run:
     event_handler = []
@@ -114,5 +123,8 @@ while run:
     game_window = DisplayManager.display("load", "load", "load")
     fullscreen_game_window = pygame.transform.scale(game_window, (768 + width_scaler, 432 + int(height_scaler / 2)))
     win.blit(fullscreen_game_window, (430, 70))
+
+    exec_check()
+
     clock.tick(60)
     pygame.display.update()

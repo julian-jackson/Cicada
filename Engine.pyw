@@ -1,6 +1,8 @@
-import pygame, os, pickle, DisplayManager
+import pygame, os, pickle, DisplayManager, time
 import win32gui, win32con
+
 def end_task():
+    print("task ended")
     sys.exit()
 
 if __name__ == "__main__":
@@ -30,11 +32,28 @@ if __name__ == "__main__":
         for rect in rects:     
             pygame.draw.rect(win, (255, 0, 255), (rect["x"], rect["y"], rect["width"], rect["height"]))
 
+    def exec_check():
+        try:
+            scan_list = []
+            epoch_time = int(time.time())
+            with open(f'{cache_path}\exec.cache', 'rb') as f:
+                last_exec_time = pickle.load(f)
+            scan_offset = -10
+            for x in range(20):
+                if epoch_time + scan_offset == last_exec_time:
+                    scan_list.append("run")
+                scan_offset += 1
+            if "run" not in scan_list:
+                end_task()
+        except:
+            pass
+
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 Cleaner.clear_cache()
                 run = False
+        exec_check()
         draw_rects(win)
         try:
             pygame.image.save(win, f"{cache_path}\Display.jpg")
